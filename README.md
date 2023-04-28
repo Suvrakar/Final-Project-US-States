@@ -21,3 +21,7 @@ Request: Response
 <h1>PATCH</h1>
 Request: Response
 /states/:state/funfact 
+
+<h1>DEL:ETE</h1>
+Request: Response
+/states/:state/funfact 
