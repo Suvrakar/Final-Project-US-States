@@ -18,7 +18,21 @@ app.get('/', (req, res) => {
 });
 
 
-app.get('/states', async (req, res) => {
+app.get('/states', (req, res) => {
+    const isContig = req.query.contig === 'true';
+
+    let filteredStates = statesData;
+    if (isContig) {
+        filteredStates = statesData.filter(state => state.code !== 'AK' && state.code !== 'HI');
+    } else if (req.query.contig === 'false') {
+        filteredStates = statesData.filter(state => state.code === 'AK' || state.code === 'HI');
+    }
+
+    res.send(filteredStates);
+});
+
+
+app.get('/states/', async (req, res) => {
     try {
         const dbStates = await States.find();
 
@@ -42,18 +56,7 @@ app.get('/states', async (req, res) => {
 
 
 
-app.get('/states', (req, res) => {
-    const isContig = req.query.contig === 'true';
 
-    let filteredStates = statesData;
-    if (isContig) {
-        filteredStates = statesData.filter(state => state.code !== 'AK' && state.code !== 'HI');
-    } else if (req.query.contig === 'false') {
-        filteredStates = statesData.filter(state => state.code === 'AK' || state.code === 'HI');
-    }
-
-    res.send(filteredStates);
-});
 
 
 
