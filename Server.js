@@ -112,7 +112,7 @@ app.get('/states/:state/funfact', async (req, res) => {
         if (dbState) {
             const funFacts = dbState.funFacts;
             const randomFact = funFacts[Math.floor(Math.random() * funFacts.length)];
-            res.json({ state: state.state, funfact: randomFact });
+            res.json({ funfact: randomFact });
         } else {
             res.json({ message: `No fun facts found for ${state.state}` });
         }
