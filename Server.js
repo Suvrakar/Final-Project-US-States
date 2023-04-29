@@ -20,22 +20,17 @@ app.get('/', (req, res) => {
 });
 
 
-app.get('/states', (req, res) => {
-    const isContig = req.query.contig === 'true';
-
-    let filteredStates = statesData;
-    if (isContig) {
-        filteredStates = statesData.filter(state => state.code !== 'AK' && state.code !== 'HI');
-    } else if (req.query.contig === 'false') {
-        filteredStates = statesData.filter(state => state.code === 'AK' || state.code === 'HI');
-    }
-
-    res.send(filteredStates);
-});
-
-
-app.get('/states/', async (req, res) => {
+app.get('/states', async (req, res) => {
     try {
+        const isContig = req.query.contig === 'true';
+
+        let filteredStates = statesData;
+        if (isContig) {
+            filteredStates = statesData.filter(state => state.code !== 'AK' && state.code !== 'HI');
+        } else if (req.query.contig === 'false') {
+            filteredStates = statesData.filter(state => state.code === 'AK' || state.code === 'HI');
+        }
+
         const dbStates = await States.find();
 
         const dbStatesMap = dbStates.reduce((map, dbState) => {
@@ -43,7 +38,7 @@ app.get('/states/', async (req, res) => {
             return map;
         }, {});
 
-        const states = statesData.map(state => {
+        const states = filteredStates.map(state => {
             const dbState = dbStatesMap[state.code];
             return dbState ? { ...state, funFacts: dbState.funFacts } : state;
         });
@@ -121,8 +116,8 @@ app.get('/states/:state/capital', (req, res) => {
 
 
 app.get('/states/:state/nickname', (req, res) => {
-    const stateCode = req.params.state.toUpperCase();
-    const state = statesData.find(state => state.code === stateCode);
+    const stateCode = req.params.state;
+    const state = statesData.find(state => state.code === stateCode.toUpperCase());
 
     if (!state) {
         res.status(400).json({ message: 'Invalid state abbreviation parameter' });
@@ -136,8 +131,8 @@ app.get('/states/:state/nickname', (req, res) => {
 
 
 app.get('/states/:state/population', (req, res) => {
-    const stateCode = (req.params.state).toUpperCase();
-    const state = statesData.find(s => s.code === stateCode);
+    const stateCode = (req.params.state)
+    const state = statesData.find(s => s.code === stateCode.toUpperCase());
 
     if (!state) {
         res.status(400).json({ message: 'Invalid state abbreviation parameter' });
