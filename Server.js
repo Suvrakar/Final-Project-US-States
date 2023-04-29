@@ -14,9 +14,9 @@ const PORT = process.env.PORT || 3000;
 connectDB();
 
 app.get('/', (req, res) => {
-    res.send('<html><body><h1>Hello, world!</h1></body></html>');
-  });
-  
+    res.sendFile(__dirname + '/index.html');
+});
+
 
 app.get('/states', (req, res) => {
     const isContig = req.query.contig === 'true';
@@ -266,7 +266,7 @@ app.delete('/states/:state/funfact', async (req, res) => {
 
 // catch-all route for 404 errors
 app.get('*', (req, res) => {
-    res.status(404).sendFile(__dirname + '/404.html');
+    res.status(500).sendFile(__dirname + '/404.html');
 });
 
 // app.get('*', (req, res) => {
