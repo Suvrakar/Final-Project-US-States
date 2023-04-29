@@ -104,23 +104,24 @@ app.get('/states/:state/funfact', async (req, res) => {
     const state = statesData.find(state => state.code === stateCode);
 
     try {
-        if (state) {
-            const dbState = await States.findOne({ stateCode });
-            if (dbState) {
-                const funFacts = dbState.funFacts;
-                const randomFact = funFacts[Math.floor(Math.random() * funFacts.length)];
-                res.json({ state: state.stateName, funFact: randomFact });
-            } else {
-                res.json({ "message": "No Fun Facts found for Georgia" });
-            }
+        if (!state) {
+            return res.status(400).json({ message: 'Invalid state abbreviation parameter' });
+        }
+
+        const dbState = await States.findOne({ stateCode });
+        if (dbState) {
+            const funFacts = dbState.funFacts;
+            const randomFact = funFacts[Math.floor(Math.random() * funFacts.length)];
+            res.json({ state: state.stateName, funFact: randomFact });
         } else {
-            res.status(404).json({ "message": "No Fun Facts found for Georgia" });
+            res.json({ message: `No fun facts found for ${state.stateName}` });
         }
     } catch (err) {
         console.log(err);
         res.status(500).json({ error: 'Server error' });
     }
 });
+
 
 
 
