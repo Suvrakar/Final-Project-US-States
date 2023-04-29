@@ -266,7 +266,7 @@ app.delete('/states/:state/funfact', async (req, res) => {
 
 // catch-all route for 404 errors
 app.get('*', (req, res) => {
-    res.status(500).sendFile(__dirname + '/404.html');
+    res.status(404).sendFile(__dirname + '/404.html');
 });
 
 // app.get('*', (req, res) => {
