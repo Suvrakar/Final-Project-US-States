@@ -14,9 +14,9 @@ const PORT = process.env.PORT || 3000;
 connectDB();
 
 app.get('/', (req, res) => {
-    res.sendFile(__dirname + '/index.html');
-});
-
+    res.send('<html><body><h1>Hello, world!</h1></body></html>');
+  });
+  
 
 app.get('/states', (req, res) => {
     const isContig = req.query.contig === 'true';
