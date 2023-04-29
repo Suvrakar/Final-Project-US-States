@@ -266,14 +266,18 @@ app.delete('/states/:state/funfact', async (req, res) => {
 
 // catch-all route for 404 errors
 app.get('*', (req, res) => {
-    if (req.accepts('html')) {
-        res.status(404).send('<h1>404</h1>');
-    } else if (req.accepts('json')) {
-        res.status(404).json({ error: '404 Not Found' });
-    } else {
-        res.status(404).send('Not found');
-    }
+    res.status(404).sendFile(__dirname + '/404.html');
 });
+
+// app.get('*', (req, res) => {
+//     if (req.accepts('html')) {
+//         res.status(404).send('<h1>404</h1>');
+//     } else if (req.accepts('json')) {
+//         res.status(404).json({ error: '404 Not Found' });
+//     } else {
+//         res.status(404).send('Not found');
+//     }
+// });
 
 
 app.listen(PORT, () => {
