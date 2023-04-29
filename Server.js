@@ -163,7 +163,7 @@ app.get('/states/:state/admission', (req, res) => {
 
 
 app.post('/states/:state/funfact', async (req, res) => {
-    const stateCode = req.params.state;
+    const stateCode = req.params.state.toUpperCase();
     const funFacts = req.body.funfacts;
 
     try {
