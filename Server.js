@@ -96,9 +96,7 @@ app.get('/states/:state/funfact', async (req, res) => {
                 const randomFact = funFacts[Math.floor(Math.random() * funFacts.length)];
                 res.json({ state: state.stateName, funFact: randomFact });
             } else {
-                const funFacts = state.funfacts;
-                const randomFact = funFacts[Math.floor(Math.random() * funFacts?.length)];
-                res.json({ state: state.stateName, funFact: randomFact });
+                res.json({"message":"No Fun Facts found for Georgia"});
             }
         } else {
             res.status(404).json({"message":"No Fun Facts found for Georgia"});
