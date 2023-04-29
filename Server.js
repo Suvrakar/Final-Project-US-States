@@ -21,16 +21,16 @@ app.get('/', (req, res) => {
 
 
 app.get('/states', async (req, res) => {
+    const isContig = req.query.contig === 'true';
+
+    let filteredStates = statesData;
+    if (isContig) {
+        filteredStates = statesData.filter(state => state.code !== 'AK' && state.code !== 'HI');
+    } else if (req.query.contig === 'false') {
+        filteredStates = statesData.filter(state => state.code === 'AK' || state.code === 'HI');
+    }
+
     try {
-        const isContig = req.query.contig === 'true';
-
-        let filteredStates = statesData;
-        if (isContig) {
-            filteredStates = statesData.filter(state => state.code !== 'AK' && state.code !== 'HI');
-        } else if (req.query.contig === 'false') {
-            filteredStates = statesData.filter(state => state.code === 'AK' || state.code === 'HI');
-        }
-
         const dbStates = await States.find();
 
         const dbStatesMap = dbStates.reduce((map, dbState) => {
@@ -52,9 +52,31 @@ app.get('/states', async (req, res) => {
 
 
 
+// app.get('/states/', async (req, res) => {
+//     try {
+//         const dbStates = await States.find();
+
+//         const dbStatesMap = dbStates.reduce((map, dbState) => {
+//             map[dbState.stateCode] = dbState;
+//             return map;
+//         }, {});
+
+//         const states = statesData.map(state => {
+//             const dbState = dbStatesMap[state.code];
+//             return dbState ? { ...state, funFacts: dbState.funFacts } : state;
+//         });
+
+//         res.json(states);
+//     } catch (err) {
+//         console.log(err);
+//         res.status(500).json({ error: 'Server error' });
+//     }
+// });
+
+
 
 app.get('/states/:state', async (req, res) => {
-    const stateCode = (req.params.state).toUpperCase();
+    const stateCode = req.params.state.toUpperCase();
     const state = statesData.find(state => state.code === stateCode);
 
     if (!state) {
@@ -62,7 +84,7 @@ app.get('/states/:state', async (req, res) => {
     }
 
     try {
-        const dbState = await States.findOne({ stateCode: state.code });
+        const dbState = await States.findOne({ stateCode: stateCode });
         if (dbState) {
             state.funFacts = dbState.funFacts;
         }
@@ -72,6 +94,7 @@ app.get('/states/:state', async (req, res) => {
         res.status(500).json({ error: 'Server error' });
     }
 });
+
 
 
 
@@ -116,8 +139,8 @@ app.get('/states/:state/capital', (req, res) => {
 
 
 app.get('/states/:state/nickname', (req, res) => {
-    const stateCode = req.params.state;
-    const state = statesData.find(state => state.code === stateCode.toUpperCase());
+    const stateCode = req.params.state.toUpperCase();
+    const state = statesData.find(state => state.code === stateCode);
 
     if (!state) {
         res.status(400).json({ message: 'Invalid state abbreviation parameter' });
@@ -131,8 +154,8 @@ app.get('/states/:state/nickname', (req, res) => {
 
 
 app.get('/states/:state/population', (req, res) => {
-    const stateCode = (req.params.state)
-    const state = statesData.find(s => s.code === stateCode.toUpperCase());
+    const stateCode = (req.params.state).toUpperCase();
+    const state = statesData.find(s => s.code === stateCode);
 
     if (!state) {
         res.status(400).json({ message: 'Invalid state abbreviation parameter' });
