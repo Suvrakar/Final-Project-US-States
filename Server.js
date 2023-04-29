@@ -101,7 +101,7 @@ app.get('/states/:state/funfact', async (req, res) => {
                 res.json({ state: state.stateName, funFact: randomFact });
             }
         } else {
-            res.status(404).json({ error: 'State not found' });
+            res.status(404).json({"message":"No Fun Facts found for Georgia"});
         }
     } catch (err) {
         console.log(err);
