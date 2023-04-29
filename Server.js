@@ -58,10 +58,6 @@ app.get('/states/', async (req, res) => {
 
 
 
-
-
-
-
 app.get('/states/:state', async (req, res) => {
     const stateCode = (req.params.state).toUpperCase();
     const state = statesData.find(state => state.code === stateCode);
@@ -112,22 +108,24 @@ app.get('/states/:state/funfact', async (req, res) => {
 
 app.get('/states/:state/capital', (req, res) => {
     const stateCode = (req.params.state).toUpperCase();
+  
+    // Check if the state abbreviation is valid
     const state = statesData.find(state => state.code === stateCode);
     if (!state) {
-        res.status(404).send('State not found');
-        return;
+      res.status(400).send('Invalid state abbreviation parameter');
+      return;
     }
-
+  
     res.send({ state: state.state, capital: state.capital_city });
-});
-
+  });
+  
 
 app.get('/states/:state/nickname', (req, res) => {
     const stateCode = req.params.state.toUpperCase();
     const state = statesData.find(state => state.code === stateCode);
 
     if (!state) {
-        res.status(404).send({ error: 'State not found' });
+        res.status(400).send('Invalid state abbreviation parameter');
         return;
     }
 
@@ -142,7 +140,7 @@ app.get('/states/:state/population', (req, res) => {
     const state = statesData.find(s => s.code === stateCode);
 
     if (!state) {
-        return res.status(404).send({ error: 'State not found' });
+        return res.status(400).send('Invalid state abbreviation parameter');
     }
 
     res.send({ state: state.state, population: state.population });
@@ -155,7 +153,7 @@ app.get('/states/:state/admission', (req, res) => {
     const state = statesData.find(s => s.code === stateCode);
 
     if (!state) {
-        return res.status(404).send({ error: 'State not found' });
+        return res.status(400).send('Invalid state abbreviation parameter');
     }
 
     res.send({ state: state.state, admitted: state.admission_date });
