@@ -93,10 +93,10 @@ app.get('/states/:state/funfact', async (req, res) => {
                 const randomFact = funFacts[Math.floor(Math.random() * funFacts.length)];
                 res.json({ state: state.stateName, funFact: randomFact });
             } else {
-                res.json({"message":"No Fun Facts found for Georgia"});
+                res.json({ "message": "No Fun Facts found for Georgia" });
             }
         } else {
-            res.status(404).json({"message":"No Fun Facts found for Georgia"});
+            res.status(404).json({ "message": "No Fun Facts found for Georgia" });
         }
     } catch (err) {
         console.log(err);
@@ -108,17 +108,17 @@ app.get('/states/:state/funfact', async (req, res) => {
 
 app.get('/states/:state/capital', (req, res) => {
     const stateCode = (req.params.state).toUpperCase();
-  
+
     // Check if the state abbreviation is valid
     const state = statesData.find(state => state.code === stateCode);
     if (!state) {
-      res.status(400).json({ message: 'Invalid state abbreviation parameter' });
-      return;
+        res.status(400).json({ message: 'Invalid state abbreviation parameter' });
+        return;
     }
-  
+
     res.send({ state: state.state, capital: state.capital_city });
-  });
-  
+});
+
 
 app.get('/states/:state/nickname', (req, res) => {
     const stateCode = req.params.state.toUpperCase();
@@ -136,15 +136,18 @@ app.get('/states/:state/nickname', (req, res) => {
 
 
 app.get('/states/:state/population', (req, res) => {
-    const stateCode = req.params.state.toUpperCase();
+    const stateCode = (req.params.state).toUpperCase();
     const state = statesData.find(s => s.code === stateCode);
 
     if (!state) {
         res.status(400).json({ message: 'Invalid state abbreviation parameter' });
+        return;
     }
 
-    res.send({ state: state.state, population: state.population });
+    const populationString = state.population.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+    res.send({ state: state.state, population: populationString });
 });
+
 
 
 
