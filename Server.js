@@ -14,8 +14,7 @@ const PORT = process.env.PORT || 3000;
 connectDB();
 
 app.get('/', (req, res) => {
-    res.setHeader('Content-Type', 'text/html');
-    res.send('<html><body><h1>Hello World!</h1></body></html>');
+    res.sendFile(__dirname + '/index.html');
 });
 
 
