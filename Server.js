@@ -14,7 +14,8 @@ const PORT = process.env.PORT || 3000;
 connectDB();
 
 app.get('/', (req, res) => {
-    res.sendFile(__dirname + '/index.html');
+    res.setHeader('Content-Type', 'text/html');
+    res.send('<html><body><h1>Hello World!</h1></body></html>');
 });
 
 
@@ -96,7 +97,7 @@ app.get('/states/:state/funfact', async (req, res) => {
                 res.json({ state: state.stateName, funFact: randomFact });
             } else {
                 const funFacts = state.funfacts;
-                const randomFact = funFacts[Math.floor(Math.random() * funFacts.length)];
+                const randomFact = funFacts[Math.floor(Math.random() * funFacts?.length)];
                 res.json({ state: state.stateName, funFact: randomFact });
             }
         } else {
