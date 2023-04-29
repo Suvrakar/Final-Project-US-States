@@ -4,11 +4,11 @@ const connectDB = require('./DB/MongoConnection');
 const express = require('express');
 const app = express();
 const bodyParser = require('body-parser')
-
+var cors = require('cors');
 
 app.use(bodyParser.json());
-app.use(cors());
 const PORT = process.env.PORT || 3000;
+app.use(cors());
 
 
 // Connect to MongoDB
