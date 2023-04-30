@@ -7,7 +7,7 @@ const stateSchema = new mongoose.Schema({
     unique: true
   },
   funfacts: [{
-    type: [String]
+    type: String
   }]
 });
 
